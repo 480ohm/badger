@@ -3,6 +3,8 @@ import exifread
 
 # image_types could also take into account .jpeg/.JPEG but it would require file_extension to be something like
 # file_extension = current_file[-4:] and then read if file_extention[0] == '.'
+# one could argue that reading 4 or 5 characters into file_extension may be more reliable but would require further
+# processing to then read the first and second characters of that for a "."
 
 image_types = ["jpg", "JPG", "nef", "NEF", "dng", "DNG"]
 
@@ -29,6 +31,11 @@ with os.scandir(path=".") as files:
                         if tag == "Image DateTimeOriginal":
                             print("Key: %s, value %s" % (tag, tags[tag]))
 
-                            # store value of Image DateTimeOriginal in a variable for processing
-                            # remove time from variable, break up remainder into DD MM YYYY
-                            # rename image file to YYYY-MM-YY-00000.EXTENSION
+                            year = str(tags[tag])[0:4]
+                            month = str(tags[tag])[5:7]
+                            day = str(tags[tag])[8:10]
+
+                            print(year + "-" + month + "-" + day + "_00001." + file_extension)
+
+                            # you will need to keep track of the number of files for a particular day. how are you going
+                            # to manage this? this is for the 0000x identifier...
